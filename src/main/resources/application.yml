@@ -1,0 +1,8 @@
+spring:
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    consumer:
+      auto-commit-interval: 3000ms #自动提交间隔
+      auto-offset-reset: latest #offset 获取规则
+
+
