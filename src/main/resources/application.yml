@@ -4,5 +4,31 @@ spring:
     consumer:
       auto-commit-interval: 3000ms #自动提交间隔
       auto-offset-reset: latest #offset 获取规则
+      enable-auto-commit: true #开启自动提交
+      fetch-max-wait: 500ms #如果没有足够的数据能够满足fetch.min.bytes，则此项配置是指在应答fetch请求之前，server会阻塞的最大时间。缺省为500个毫秒。和上面的fetch.min.bytes结合起来，要么满足数据的大小，要么满足时间，就看哪个条件先满足。
+      fetch-min-size: 8B
+      heartbeat-interval: 3000ms
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      max-poll-records: 100 #一次poll 获取的最大消息数量
+      properties: {partition.assignment.strategy: org.apache.kafka.clients.consumer.RangeAssignor}
+    # 这里配置的生产者参数是全局的，如果要自定义参数，需要自己new DefaultKafkaProducerFactory，并设置定义参数
+    producer:
+      acks: 0 #0,1,all 0表示发送就不管了，1表示发送到首领就表示发送成功，all表示发送到首领和副本都成功才表示发送成
+      batch-size: 16KB #一个批次的大小，一个批次中的消息一定是同个分区的数据
+      buffer-memory: 32MB #设置生产者内存缓冲区的大小，生产者用它缓冲要发送到服务器的消息
+      compression-type: none #producer用于压缩数据的压缩类型。默认是无压缩。正确的选项值是none、gzip、snappy
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 3 #重试次数
+      properties: {linger.ms: 0}
 
-
+    listener:
+      ack-mode: record
+      concurrency: 1 #消费者的数量
+      poll-timeout: 500ms #poll的阻塞时间
+      ack-count: 10 #一次ack的数量，当ack-mode 为count时有效
+      ack-time: 500ms #两次ack之间的间隔，当ack-mode为count或COUNT_TIME时有效
+      idle-event-interval: 5000ms # 消费者发布事件的间隔
+      monitor-interval: 5000ms #消费者监控间隔
+      log-container-config: true #是否在初始化（INFO级别）期间记录容器配置。
