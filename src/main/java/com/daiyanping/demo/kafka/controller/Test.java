@@ -27,7 +27,7 @@ public class Test {
     }
 
     @PostMapping("/send/{id}")
-    public void sendTest2(@PathVariable("id") String id) {
+    public void sendTest2(@PathVariable("id") String id, String id2) {
         System.out.println(id);
     }
 }

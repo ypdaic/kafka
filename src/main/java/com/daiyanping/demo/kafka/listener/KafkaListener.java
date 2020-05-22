@@ -18,7 +18,15 @@ public class KafkaListener {
      * properties 可以为每个消费者指定各自的消费参数
      * @param record
      */
-    @org.springframework.kafka.annotation.KafkaListener(topics = {"test"}, groupId = "a", properties = {"consumer-config-1.properties"})
+    @org.springframework.kafka.annotation.KafkaListener(topics = {"test"}, groupId = "a",
+            properties = {
+                "auto.commit.interval.ms:6000",
+                "auto.offset.reset:latest",
+                "enable.auto.commit:true",
+                "key.deserializer:org.apache.kafka.common.serialization.StringDeserializer",
+                "value.deserializer:org.apache.kafka.common.serialization.StringDeserializer",
+                "max.poll.records:100"
+            })
     public void test(ConsumerRecord<String, String> record) {
         String key = record.key();
         String value = record.value();
