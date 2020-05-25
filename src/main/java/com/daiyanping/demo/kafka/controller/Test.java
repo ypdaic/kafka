@@ -21,6 +21,10 @@ public class Test {
     @Autowired
     KafkaTemplate kafkaTemplate;
 
+    /**
+     * KafkaTemplate 的生产者参数默认使用，KafKaProperties的总体配置，如果想要
+     * 配置多个生成者参数，需要配置多个KafKaTemplate，也就是配置多个DefaultKafkaProducerFactory
+     */
     @PostMapping("/send")
     public void sendTest() {
         kafkaTemplate.send("test", "key", "value");
