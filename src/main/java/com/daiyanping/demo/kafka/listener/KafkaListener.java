@@ -1,7 +1,13 @@
 package com.daiyanping.demo.kafka.listener;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.TopicPartition;
+import org.springframework.kafka.listener.ConsumerSeekAware;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @ClassName KafkaListener
@@ -11,7 +17,7 @@ import org.springframework.stereotype.Component;
  * @Version 0.1
  */
 @Component
-public class KafkaListener {
+public class KafkaListener implements ConsumerSeekAware {
 
     /**
      * 当groupId不配置时，将id作为groupId
@@ -33,5 +39,29 @@ public class KafkaListener {
         String value = record.value();
 
         System.out.println("键：" + key + " 值：" + value);
+    }
+
+    /**
+     * 这里的ConsumerSeekCallback就是我们的ListenerConsumer，该方法在
+     * ListenerConsumer的run方法中会执行 ((ConsumerSeekAware) this.genericListener).registerSeekCallback(this);
+     * 我们可以在这里去指定我们的消费偏移量，前提是使用的assgin 手动模式，但是如果使用的是assgin，这里就不需要了，因为
+     * ListenerConsumer 会调用 initPartitionsIfNeeded方法进行偏量的初始化
+     *
+     * subscribe模式自动分配分区，是无法确定一个消费者每次重启都是分配的同一个分区的，所以就无法通过seek初始化偏移量
+     * @param callback
+     */
+    @Override
+    public void registerSeekCallback(ConsumerSeekCallback callback) {
+
+    }
+
+    @Override
+    public void onPartitionsAssigned(Map<TopicPartition, Long> assignments, ConsumerSeekCallback callback) {
+
+    }
+
+    @Override
+    public void onIdleContainer(Map<TopicPartition, Long> assignments, ConsumerSeekCallback callback) {
+
     }
 }
